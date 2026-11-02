@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B2E4F">
+<title>Off The Grid Hawaii</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --ink:#0A0A0A; --ink-2:#2B2B2B; --paper:#FFFFFF; --wash:#F2F4F7; --line:#B8C0CC;
+  --navy:#0B2E4F; --go:#0E6B34; --go-ink:#FFFFFF; --sun:#F5B400; --stop:#B3261E; --blue:#0B57D0;
+  --s-new:#0B57D0; --s-visit:#7A3C9E; --s-bid:#A15C00; --s-won:#0E6B34; --s-done:#3D4451; --s-lost:#B3261E;
+  --radius:16px; color-scheme:light;
+}
+html{font-size:24px}
+html[data-size="2"]{font-size:28px}
+html[data-size="3"]{font-size:32px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Roboto,"Segoe UI",Arial,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+.top{position:sticky;top:0;z-index:10;background:var(--navy);color:#fff;display:flex;align-items:center;gap:.5rem;padding:calc(env(safe-area-inset-top) + .4rem) .6rem .4rem;min-height:3.2rem}
+.top h1{font-size:1.15rem;margin:0;flex:1;line-height:1.2}
+.back{background:#fff;color:var(--navy);border:0;border-radius:12px;min-height:2.6rem;padding:0 .7rem;font-weight:700;display:flex;align-items:center;gap:.3rem;cursor:pointer}
+main{padding:.8rem .8rem calc(6rem + env(safe-area-inset-bottom));max-width:44rem;margin:0 auto}
+h2{font-size:1.25rem;margin:1.1rem 0 .5rem}
+p{margin:.4rem 0}
+.muted{color:var(--ink-2)}
+.big{display:flex;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:3.4rem;padding:.5rem 1rem;border-radius:var(--radius);border:3px solid var(--navy);background:var(--paper);color:var(--navy);font-weight:700;font-size:1.05rem;cursor:pointer;touch-action:manipulation;text-align:center;text-decoration:none;margin:.5rem 0}
+.big:active{transform:scale(.98)}
+.big.primary{background:var(--go);border-color:var(--go);color:var(--go-ink)}
+.big.navy{background:var(--navy);color:#fff}
+.big.danger{border-color:var(--stop);color:var(--stop)}
+.big svg,.tile svg,.act svg{width:1.4em;height:1.4em;flex:none}
+.tiles{display:grid;grid-template-columns:1fr;gap:.7rem;margin-top:.6rem}
+.tile{display:flex;align-items:center;gap:.8rem;min-height:4.4rem;padding:.6rem 1rem;border-radius:var(--radius);border:0;background:var(--navy);color:#fff;font-weight:700;font-size:1.2rem;cursor:pointer;text-align:left;width:100%}
+.tile small{display:block;font-weight:400;font-size:.8rem;opacity:.95}
+.tile.alt{background:var(--go)}
+.today{border:3px solid var(--sun);background:#FFF8E1;border-radius:var(--radius);padding:.7rem .9rem;margin-top:.4rem}
+.today b{font-size:1.15rem}
+.card{display:block;width:100%;text-align:left;border:2px solid var(--line);background:var(--paper);border-radius:var(--radius);padding:.7rem .9rem;margin:.6rem 0;cursor:pointer}
+.card .name{font-weight:700;font-size:1.15rem}
+.badge{display:inline-block;color:#fff;border-radius:999px;padding:.05rem .6rem;font-size:.85rem;font-weight:700;margin-right:.4rem}
+.due{color:var(--stop);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.chip{border:2px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;min-height:2.6rem;padding:0 .8rem;font-weight:700;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--navy);color:#fff}
+label{display:block;font-weight:700;margin:.9rem 0 .25rem}
+.hint{font-weight:400;font-size:.8rem;color:var(--ink-2);display:block}
+input[type=text],input[type=tel],input[type=email],input[type=number],input[type=date],textarea,select{width:100%;min-height:3rem;border:3px solid var(--line);border-radius:12px;padding:.35rem .6rem;background:#fff}
+input:focus,textarea:focus,select:focus,button:focus-visible,a:focus-visible{outline:4px solid var(--sun);outline-offset:2px;border-color:var(--navy)}
+textarea{min-height:5rem}
+input[type=range]{width:100%;height:3rem;accent-color:var(--go);margin:.2rem 0}
+.row{display:flex;gap:.6rem}
+.row>*{flex:1}
+.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:.6rem 0}
+.act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;min-height:4.2rem;border-radius:var(--radius);background:var(--navy);color:#fff;font-weight:700;text-decoration:none;font-size:.95rem;border:0;cursor:pointer}
+.act.off{background:#8A93A0}
+.check{display:flex;align-items:center;gap:.7rem;min-height:3.2rem;border:2px solid var(--line);border-radius:12px;padding:.3rem .7rem;margin:.4rem 0;font-weight:700;cursor:pointer}
+.check input{width:1.5rem;height:1.5rem;flex:none}
+.item{border:2px solid var(--line);border-radius:12px;padding:.5rem .7rem;margin:.5rem 0}
+.item .t{font-weight:700}
+.stepper{display:flex;align-items:center;gap:.5rem;margin-top:.3rem}
+.stepper button{width:3rem;height:3rem;border-radius:12px;border:3px solid var(--navy);background:#fff;color:var(--navy);font-size:1.4rem;font-weight:700;cursor:pointer}
+.stepper .q{min-width:2.5rem;text-align:center;font-weight:700;font-size:1.2rem}
+.total{font-size:1.4rem;font-weight:700}
+.money{font-variant-numeric:tabular-nums}
+.say{border-left:6px solid var(--go);background:var(--wash);padding:.5rem .8rem;border-radius:8px;margin:.5rem 0}
+.say li{margin:.35rem 0}
+.progress{font-weight:700;color:var(--ink-2);margin:.3rem 0}
+.toast{position:fixed;left:.8rem;right:.8rem;bottom:calc(1rem + env(safe-area-inset-bottom));background:var(--ink);color:#fff;border-radius:14px;padding:.8rem 1rem;font-weight:700;display:none;z-index:50;align-items:center;justify-content:space-between;gap:.6rem}
+.toast button{background:var(--sun);color:#000;border:0;border-radius:10px;min-height:2.6rem;padding:0 .8rem;font-weight:700}
+.empty{border:3px dashed var(--line);border-radius:var(--radius);padding:1rem;text-align:center;color:var(--ink-2)}
+/* the bid paper */
+.paper{border:2px solid var(--line);border-radius:12px;padding:1rem;background:#fff;font-size:.8rem}
+.paper h3{margin:0;font-size:1.2rem}
+.paper table{width:100%;border-collapse:collapse;margin:.6rem 0}
+.paper td,.paper th{border-bottom:1px solid var(--line);padding:.35rem .2rem;text-align:left;vertical-align:top}
+.paper td.n,.paper th.n{text-align:right;white-space:nowrap}
+.paper .sum td{border:0;font-weight:700}
+.sign{margin-top:1.2rem;display:grid;grid-template-columns:2fr 1fr;gap:1rem}
+.sign div{border-top:1px solid var(--ink);padding-top:.2rem}
+@media print{
+  html{font-size:12pt}
+  .top,.noprint,.toast{display:none!important}
+  main{padding:0;max-width:none}
+  .paper{border:0;padding:0;font-size:11pt}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.big:active{transform:none}}
+</style>
+</head>
+<body>
+<header class="top" id="top"></header>
+<main id="app" tabindex="-1"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button id="toastUndo" hidden>Undo</button></div>
+
+<script>
+/* ---------- icons (Lucide-style strokes) ---------- */
+const I = {
+  phone:'<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  text:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  map:'<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+  users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+  file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8"/>',
+  chat:'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
+  tag:'<path d="M12.6 2.6A2 2 0 0 0 11.2 2H4a2 2 0 0 0-2 2v7.2a2 2 0 0 0 .6 1.4l8.7 8.7a2.4 2.4 0 0 0 3.4 0l6.6-6.6a2.4 2.4 0 0 0 0-3.4z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  back:'<path d="M19 12H5M12 19l-7-7 7-7"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"/>',
+  share:'<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/>',
+  arrow:'<path d="M5 12h14M12 5l7 7-7 7"/>'
+};
+const ic = n => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+
+/* ---------- data ---------- */
+const STEPS = [
+  {k:'new',   name:'New',        color:'var(--s-new)',   next:'visit', nextLabel:'Visit is set'},
+  {k:'visit', name:'Visit set',  color:'var(--s-visit)', next:'bid',   nextLabel:'Bid is sent'},
+  {k:'bid',   name:'Bid sent',   color:'var(--s-bid)',   next:'won',   nextLabel:'They said yes'},
+  {k:'won',   name:'Won',        color:'var(--s-won)',   next:'done',  nextLabel:'Job is done'},
+  {k:'done',  name:'Done',       color:'var(--s-done)'},
+  {k:'lost',  name:'Said no',    color:'var(--s-lost)'}
+];
+const step = k => STEPS.find(s => s.k === k) || STEPS[0];
+const SERVICES = ['Backup power','Solar','EV charger','Service upgrade','Sub panel','Electrical work','Container / modular build','Repair or warranty'];
+
+const KEY = 'otg-data-v1';
+const fresh = () => ({
+  biz:{name:'Off The Grid Hawaii', owner:'Robert St. Clair', license:'10272', phone:'808-224-4603', email:'rstc808@gmail.com', goodDays:30, get:true, markup:0},
+  customers:[], bids:[], seq:1,
+  prices:[
+    {id:id(), name:'Labor', unit:'hour', price:null, cost:null},
+    {id:id(), name:'Service upgrade', unit:'job', price:null, cost:null},
+    {id:id(), name:'Sub panel move', unit:'job', price:null, cost:null},
+    {id:id(), name:'EV charger install', unit:'job', price:null, cost:null},
+    {id:id(), name:'Permit and paperwork', unit:'job', price:null, cost:null}
+  ]
+});
+function id(){ return Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-3); }
+let D;
+try { D = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch(e){ D = fresh(); }
+D.biz = Object.assign({deposit:80, ovh:10, gcTotal:25000, gcWeeks:4, rates:{}}, D.biz);
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(D)); } catch(e){ toast('Could not save on this phone. Make a backup.'); } }
+const size = localStorage.getItem('otg-size') || '1';
+document.documentElement.dataset.size = size;
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => '$' + (Math.round((n||0)*100)/100).toLocaleString('en-US',{minimumFractionDigits:2, maximumFractionDigits:2});
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const addDays = n => { const d = new Date(); d.setDate(d.getDate()+n); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const niceDate = s => s ? new Date(s+'T12:00:00').toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'}) : '';
+const digits = s => String(s||'').replace(/[^\d+]/g,'');
+const cust = cid => D.customers.find(c => c.id === cid);
+const GET_RATE = 0.04712; // Oʻahu max pass-on rate, Hawaiʻi Dept. of Taxation
+
+let undoFn = null, toastTimer;
+function toast(msg, undo){
+  $('#toastMsg').textContent = msg; undoFn = undo || null;
+  $('#toastUndo').hidden = !undo; $('#toast').style.display = 'flex';
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=> $('#toast').style.display='none', undo ? 7000 : 3500);
+}
+$('#toastUndo').onclick = () => { if (undoFn) { undoFn(); undoFn = null; } $('#toast').style.display='none'; };
+
+function bar(title, backTo){
+  $('#top').innerHTML = (backTo !== undefined ? `<button class="back" onclick="go('${backTo}')">${ic('back')}Back</button>` : '') + `<h1>${esc(title)}</h1>`;
+  document.title = title + ' · OTG';
+}
+function go(h){ location.hash = h; }
+function render(html){ const a = $('#app'); a.innerHTML = html; window.scrollTo(0,0); a.focus({preventScroll:true}); }
+function dueList(){ const t = today(); return D.customers.filter(c => c.next && c.next <= t && !['done','lost'].includes(c.step)); }
+
+/* ---------- screens ---------- */
+function home(){
+  bar('Off The Grid Hawaii');
+  const due = dueList();
+  const hr = new Date().getHours();
+  const hello = hr < 12 ? 'Good morning' : hr < 18 ? 'Good afternoon' : 'Good evening';
+  render(`
+    <p style="font-size:1.2rem;font-weight:700;margin-top:.2rem">${hello}, ${esc((D.biz.owner||'').split(' ')[0] || 'boss')}.</p>
+    <div class="today">
+      ${due.length ? `<b>${due.length} ${due.length===1?'person':'people'} to call today</b>
+        ${due.map(c=>`<button class="card" onclick="go('#/c/${c.id}')"><span class="name">${esc(c.name)}</span><br><span class="badge" style="background:${step(c.step).color}">${step(c.step).name}</span>${c.next < today() ? '<span class="due">Late</span>' : ''}</button>`).join('')}`
+      : `<b>Nobody to call today.</b><p class="muted">When you set a "call back" day for a customer, they show up here.</p>`}
+    </div>
+    <div class="tiles">
+      <button class="tile" onclick="go('#/list')">${ic('users')}<span>My customers<small>${D.customers.filter(c=>!['done','lost'].includes(c.step)).length} open</small></span></button>
+      <button class="tile alt" onclick="go('#/bid/new')">${ic('file')}<span>Make a bid<small>or a quick estimate</small></span></button>
+      <button class="tile" onclick="go('#/say')">${ic('chat')}<span>What to say<small>for every call and visit</small></span></button>
+      <button class="tile" onclick="go('#/prices')">${ic('tag')}<span>My prices<small>what you charge</small></span></button>
+    </div>
+    <button class="big" onclick="go('#/settings')" style="margin-top:1.2rem">${ic('gear')}Settings, text size, backup</button>
+  `);
+}
+
+let filter = 'open';
+function list(){
+  bar('My customers', '#/');
+  const open = D.customers.filter(c => !['done','lost'].includes(c.step));
+  const shown = filter === 'open' ? open : D.customers.filter(c => c.step === filter);
+  const chip = (k, label, n) => `<button class="chip" aria-pressed="${filter===k}" onclick="filter='${k}';list()">${label} (${n})</button>`;
+  shown.sort((a,b) => (a.next||'9999').localeCompare(b.next||'9999'));
+  render(`
+    <button class="big primary" onclick="go('#/c/new')">${ic('plus')}Add a customer</button>
+    <div class="chips">${chip('open','Open',open.length)}${STEPS.map(s=>chip(s.k, s.name, D.customers.filter(c=>c.step===s.k).length)).join('')}</div>
+    ${shown.length ? shown.map(c => `
+      <button class="card" onclick="go('#/c/${c.id}')">
+        <span class="name">${esc(c.name)}</span><br>
+        <span class="badge" style="background:${step(c.step).color}">${step(c.step).name}</span>
+        ${c.next ? `<span class="${c.next<=today()?'due':'muted'}">Call back ${c.next===today()?'today':niceDate(c.next)}</span>` : ''}
+        ${c.wants && c.wants.length ? `<br><span class="muted">${esc(c.wants.join(', '))}</span>` : ''}
+      </button>`).join('') : `<div class="empty">Nobody here yet.</div>`}
+  `);
+}
+
+function custView(cid){
+  const c = cust(cid); if (!c) return go('#/list');
+  bar(c.name, '#/list');
+  const s = step(c.step);
+  const bids = D.bids.filter(b => b.cid === c.id);
+  const ph = digits(c.phone);
+  render(`
+    <div class="acts">
+      <a class="act ${ph?'':'off'}" ${ph?`href="tel:${ph}"`:''} aria-label="Call ${esc(c.name)}">${ic('phone')}Call</a>
+      <a class="act ${ph?'':'off'}" ${ph?`href="sms:${ph}"`:''} aria-label="Text ${esc(c.name)}">${ic('text')}Text</a>
+      <a class="act ${c.address?'':'off'}" ${c.address?`href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(c.address)}" target="_blank" rel="noopener"`:''} aria-label="Map">${ic('map')}Map</a>
+    </div>
+    <p>${c.phone ? esc(c.phone) : '<span class="muted">No phone yet</span>'}${c.address ? '<br>'+esc(c.address) : ''}</p>
+    ${c.wants && c.wants.length ? `<p><b>Wants:</b> ${esc(c.wants.join(', '))}</p>` : ''}
+
+    <h2>Where they are</h2>
+    <p><span class="badge" style="background:${s.color};font-size:1rem">${s.name}</span></p>
+    ${s.next ? `<button class="big primary" onclick="moveStep('${c.id}','${s.next}')">${ic('check')}${s.nextLabel}</button>` : ''}
+    <button class="big" onclick="go('#/say/${c.step}')">${ic('chat')}What to say now</button>
+    <button class="big" onclick="askGemini('${c.id}')">${ic('sun')}Ask Gemini about this job</button>
+
+    <h2>Call back on</h2>
+    <p>${c.next ? `<span class="${c.next<=today()?'due':''}">${c.next===today()?'Today':niceDate(c.next)}</span>` : '<span class="muted">Not set</span>'}</p>
+    <div class="row noprint">
+      <button class="big" onclick="setNext('${c.id}',1)">Tomorrow</button>
+      <button class="big" onclick="setNext('${c.id}',3)">In 3 days</button>
+    </div>
+    <div class="row">
+      <button class="big" onclick="setNext('${c.id}',7)">Next week</button>
+      <button class="big" onclick="setNext('${c.id}',0)">No date</button>
+    </div>
+
+    <h2>Notes</h2>
+    <textarea id="notes" aria-label="Notes" onchange="saveNotes('${c.id}', this.value)" placeholder="Tap here to write. Tap the microphone on the keyboard to talk instead.">${esc(c.notes)}</textarea>
+
+    <h2>Bids</h2>
+    ${bids.length ? bids.map(b => `<button class="card" onclick="go('#/bid/${b.id}')"><span class="name">${b.estimate?'Estimate':'Bid'} #${b.num}</span> <span class="money">${money(bidTotal(b).total)}</span><br><span class="muted">${niceDate(b.date)}${b.sent?' · sent':''}</span></button>`).join('') : '<p class="muted">No bids yet.</p>'}
+    <button class="big primary" onclick="go('#/bid/new/${c.id}')">${ic('file')}Make a bid for ${esc(c.name.split(' ')[0])}</button>
+
+    <h2>More</h2>
+    <button class="big" onclick="go('#/c/${c.id}/edit')">Change name, phone or address</button>
+    <label for="stepPick">Put them in a different step</label>
+    <select id="stepPick" onchange="moveStep('${c.id}', this.value)">${STEPS.map(x=>`<option value="${x.k}" ${x.k===c.step?'selected':''}>${x.name}</option>`).join('')}</select>
+    <button class="big danger" onclick="delCust('${c.id}')">Delete this customer</button>
+  `);
+}
+function moveStep(cid, k){
+  const c = cust(cid), was = c.step; c.step = k;
+  if (k === 'visit' && !c.next) c.next = addDays(1);
+  if (k === 'bid') c.next = addDays(3);
+  if (k === 'done' || k === 'lost') c.next = '';
+  save(); custView(cid);
+  toast(`Moved to ${step(k).name}.`, () => { c.step = was; save(); custView(cid); });
+}
+function setNext(cid, n){ const c = cust(cid); c.next = n ? addDays(n) : ''; save(); custView(cid); toast(n ? `Call back ${niceDate(c.next)}.` : 'Call-back date cleared.'); }
+async function askGemini(cid){
+  const c = cust(cid), s = step(c.step);
+  const bids = D.bids.filter(b => b.cid === cid);
+  const last = bids[bids.length-1];
+  const q = [
+    `I run ${D.biz.name}, a licensed solar and electrical contractor on Oʻahu. Help me with a customer.`,
+    `They want: ${(c.wants||[]).join(', ') || 'not sure yet'}.`,
+    `Where we are: ${s.name}.`,
+    last ? `My last ${last.estimate?'estimate':'bid'} was ${money(bidTotal(last).total)}.` : '',
+    c.notes ? `My notes: ${c.notes}` : '',
+    `Tell me in plain words, short: what should I say next, and what should I ask them?`
+  ].filter(Boolean).join('\n');
+  try { await navigator.clipboard.writeText(q); toast('Question copied. In Gemini, press and hold, then tap Paste.'); }
+  catch(e){ prompt('Copy this, then paste it into Gemini:', q); }
+  setTimeout(() => { location.href = 'https://gemini.google.com/app'; }, 1200);
+}
+function saveNotes(cid, v){ cust(cid).notes = v; save(); toast('Notes saved.'); }
+function delCust(cid){
+  const c = cust(cid);
+  if (!confirm(`Delete ${c.name}? Their bids go too.`)) return;
+  const snap = JSON.stringify(D);
+  D.customers = D.customers.filter(x => x.id !== cid); D.bids = D.bids.filter(b => b.cid !== cid);
+  save(); go('#/list');
+  toast(`${c.name} deleted.`, () => { D = JSON.parse(snap); save(); route(); });
+}
+
+function custForm(cid){
+  const c = cid ? cust(cid) : {name:'',phone:'',address:'',wants:[],notes:''};
+  bar(cid ? 'Change details' : 'New customer', cid ? `#/c/${cid}` : '#/list');
+  render(`
+    <label for="f-name">Name <span class="hint">Who is it?</span></label>
+    <input id="f-name" type="text" autocomplete="name" value="${esc(c.name)}">
+    <label for="f-phone">Phone</label>
+    <input id="f-phone" type="tel" autocomplete="tel" inputmode="tel" value="${esc(c.phone)}">
+    <label for="f-addr">Address <span class="hint">Where is the job?</span></label>
+    <input id="f-addr" type="text" autocomplete="street-address" value="${esc(c.address)}">
+    <label>What do they want? <span class="hint">Tap all that fit.</span></label>
+    ${SERVICES.map((s,i)=>`<label class="check"><input type="checkbox" value="${esc(s)}" ${c.wants.includes(s)?'checked':''}>${esc(s)}</label>`).join('')}
+    ${cid ? '' : `<label for="f-notes">Notes</label><textarea id="f-notes" placeholder="Anything to remember. You can talk instead of type with the microphone on the keyboard."></textarea>`}
+    <p id="f-err" class="due" role="alert"></p>
+    <button class="big primary" onclick="saveCust('${cid||''}')">${ic('check')}Save</button>
+  `);
+}
+function saveCust(cid){
+  const name = $('#f-name').value.trim();
+  if (!name) { $('#f-err').textContent = 'Please type a name first.'; $('#f-name').focus(); return; }
+  const data = {name, phone:$('#f-phone').value.trim(), address:$('#f-addr').value.trim(), wants:[...document.querySelectorAll('.check input:checked')].map(x=>x.value)};
+  let c;
+  if (cid) { c = Object.assign(cust(cid), data); }
+  else { c = {id:id(), step:'new', next:today(), notes:$('#f-notes').value.trim(), created:today(), ...data}; D.customers.push(c); }
+  save(); go(`#/c/${c.id}`); toast('Saved.');
+}
+
+/* ---------- bids ---------- */
+let W = null; // the bid being made
+function bidTotal(b){
+  const sub = b.lines.reduce((s,l)=> s + (l.qty||0)*(l.price||0), 0);
+  const tax = b.get ? Math.round(sub*GET_RATE*100)/100 : 0;
+  return {sub, tax, total: sub + tax};
+}
+function bidNew(cid){
+  W = {cid: cid || null, job:[], lines:[], estimate:false, get:D.biz.get, note:'', crew:null, deposit:D.biz.deposit ?? 80};
+  if (cid) { const c = cust(cid); W.job = [...(c.wants||[])]; }
+  cid ? bidStep2() : bidStep1();
+}
+function bidStep1(){
+  bar('Make a bid · Step 1 of 5', '#/');
+  const people = D.customers.filter(c => c.step !== 'lost');
+  render(`
+    <p class="progress">Step 1 of 5: Who is it for?</p>
+    <button class="big primary" onclick="go('#/c/new')">${ic('plus')}Someone new</button>
+    ${people.map(c=>`<button class="card" onclick="W.cid='${c.id}';W.job=[...(cust('${c.id}').wants||[])];bidStep2()"><span class="name">${esc(c.name)}</span><br><span class="muted">${esc((c.wants||[]).join(', '))}</span></button>`).join('') || '<div class="empty">No customers yet. Add one first.</div>'}
+  `);
+}
+function bidStep2(){
+  bar('Make a bid · Step 2 of 5', '#/');
+  render(`
+    <p class="progress">Step 2 of 5: What is the job? <span class="muted">(${esc(cust(W.cid).name)})</span></p>
+    ${SERVICES.map(s=>`<label class="check"><input type="checkbox" value="${esc(s)}" ${W.job.includes(s)?'checked':''}>${esc(s)}</label>`).join('')}
+    <label class="check" style="margin-top:1rem;border-color:var(--sun)"><input type="checkbox" id="w-est" ${W.estimate?'checked':''}>Just a rough estimate for now <span class="hint" style="display:inline">(final price after the visit)</span></label>
+    <button class="big primary" onclick="W.job=[...document.querySelectorAll('.check input[value]:checked')].map(x=>x.value);W.estimate=$('#w-est').checked;bidStep3()">Next ${ic('arrow')}</button>
+  `);
+}
+function bidStep3(){
+  bar('Make a bid · Step 3 of 5', '#/');
+  const qty = pid => (W.lines.find(l => l.pid === pid)||{}).qty || 0;
+  const extras = W.lines.filter(l => !l.pid);
+  render(`
+    <p class="progress">Step 3 of 5: What goes in it? Tap + for each one.</p>
+    ${D.prices.map(p => `
+      <div class="item">
+        <div class="t">${esc(p.name)}</div>
+        <div class="muted">${p.price!=null ? `${money(p.price)} per ${esc(p.unit)}` : `<span class="due">No price yet.</span> Set it in My prices.`}</div>
+        ${p.price!=null ? `<div class="stepper"><button aria-label="One less ${esc(p.name)}" onclick="bump('${p.id}',-1)">−</button><span class="q" aria-live="polite">${qty(p.id)}</span><button aria-label="One more ${esc(p.name)}" onclick="bump('${p.id}',1)">+</button><span class="muted">${esc(p.unit)}${qty(p.id)===1?'':'s'}</span></div>` : ''}
+      </div>`).join('')}
+    ${extras.map((l,i) => `<div class="item"><div class="t">${esc(l.name)}</div><div class="money">${money(l.price)}</div><button class="big danger" onclick="W.lines.splice(W.lines.indexOf(W.lines.filter(x=>!x.pid)[${i}]),1);bidStep3()">Take it off</button></div>`).join('')}
+    <h2>Something else?</h2>
+    <label for="x-name">What is it</label><input id="x-name" type="text">
+    <label for="x-price">Price</label><input id="x-price" type="number" inputmode="decimal" min="0" step="0.01">
+    <button class="big" onclick="addExtra()">${ic('plus')}Add it</button>
+    <p class="total money" style="margin-top:1rem">So far: ${money(bidTotal(W).sub)}</p>
+    <button class="big primary" onclick="bidCrew()">Next ${ic('arrow')}</button>
+  `);
+}
+function bump(pid, n){
+  const p = D.prices.find(x => x.id === pid);
+  let l = W.lines.find(x => x.pid === pid);
+  if (!l) { l = {pid, name:p.name, unit:p.unit, price:p.price, cost:p.cost, qty:0}; W.lines.push(l); }
+  l.qty = Math.max(0, l.qty + n);
+  if (!l.qty) W.lines = W.lines.filter(x => x !== l);
+  const y = window.scrollY; bidStep3(); window.scrollTo(0, y);
+}
+function addExtra(){
+  const name = $('#x-name').value.trim(), price = parseFloat($('#x-price').value);
+  if (!name || isNaN(price)) { toast('Type what it is and the price.'); return; }
+  W.lines.push({name, unit:'job', price, qty:1}); const y = window.scrollY; bidStep3(); window.scrollTo(0, y);
+}
+/* ---------- crew and timeline ---------- */
+const TRADES = ['Electrician (Rob)','Electrician','Electrician helper','Laborer','Solar installer','Plumber','HVAC tech','Carpenter','Roofer','Concrete / mason','Drywall','Painter','General contractor (GC)','Other'];
+const GC_TRADES = ['Plumber','HVAC tech','Carpenter','Roofer','Concrete / mason','Drywall','Painter','General contractor (GC)'];
+const nextMonday = () => { const d = new Date(); d.setDate(d.getDate()+7); while (d.getDay() !== 1) d.setDate(d.getDate()+1); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const longDate = d => d ? d.toLocaleDateString('en-US',{weekday:'short', month:'short', day:'numeric'}) : '';
+const fullDate = d => d ? d.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'}) : '';
+const isLaborHours = l => !l.crew && l.unit === 'hour' && /^labor$/i.test(l.name);
+function newCrew(){
+  const r = D.biz.rates || {};
+  return {base:'', hpd:6, dpw:4, start:nextMonday(), plan:'', mk:D.biz.markup, onBid:true, anson:false,
+    workers:[{trade:'Electrician (Rob)', rate:r['Electrician (Rob)'] ?? ''}, {trade:'Electrician helper', rate:r['Electrician helper'] ?? ''}]};
+}
+// Baseline: Rob + 1 helper at 6-hour days. More workers finish sooner, but each worker past two adds
+// D.biz.ovh % more total time for coordination, so big crews still price right.
+function crewCalc(k){
+  if (!k) return null;
+  const n = k.workers.length, hpd = Math.max(1, +k.hpd || 6), dpw = Math.min(7, Math.max(1, Math.round(+k.dpw || 4)));
+  const H = (+k.base || 0) * 6 * 2;
+  const ovh = 1 + (+(D.biz.ovh ?? 10))/100 * Math.max(0, n-2);
+  const days = n && H ? Math.ceil(H*ovh/(n*hpd)*2)/2 : 0;
+  const hrs = days * hpd, plan = +k.plan || 0;
+  const cost = k.workers.reduce((s,w)=> s + (+w.rate || 0)*hrs, 0) + plan*(+k.workers[0]?.rate || 0);
+  const charge = Math.round(cost*(1 + (+k.mk || 0)/100)*100)/100;
+  const dates = [], d = new Date((k.start || nextMonday()) + 'T12:00:00');
+  for (let g = 0; dates.length < Math.ceil(days) && g < 20000; g++) { if ((d.getDay() || 7) <= dpw) dates.push(new Date(d)); d.setDate(d.getDate()+1); }
+  const weeks = [];
+  dates.forEach(x => { const m = new Date(x); m.setDate(m.getDate() - ((m.getDay() || 7) - 1)); const key = m.toDateString(); let w = weeks.find(y => y.key === key); if (!w) weeks.push(w = {key, days:[]}); w.days.push(x); });
+  const missing = k.workers.filter(w => !w.beer && (w.rate === '' || w.rate == null)).length;
+  return {n, hpd, dpw, ovh, days, hrs, plan, cost, charge, dates, weeks, start:dates[0], finish:dates[dates.length-1], missing};
+}
+function crewLines(b, kc){
+  let lines = b.lines.filter(l => !l.crew);
+  if (b.crew && b.crew.onBid && kc && kc.days) {
+    lines = lines.filter(l => !isLaborHours(l));
+    lines.push({name:`Labor: ${kc.n}-person crew, about ${kc.days} work days`, unit:'job', price:kc.charge, cost:kc.cost, qty:1, crew:true});
+  }
+  return lines;
+}
+function gcReasons(b, kc){
+  const z = D.biz, r = [];
+  const other = [...new Set(((b.crew && b.crew.workers) || []).map(w => w.trade).filter(t => GC_TRADES.includes(t)))];
+  if (other.length) r.push(`Other trades on the crew: ${other.join(', ')}`);
+  if ((b.job || []).includes('Container / modular build')) r.push('Container or modular build');
+  const big = +z.gcTotal || 25000;
+  if (bidTotal(b).total >= big) r.push(`Over ${money(big)}`);
+  if (kc && kc.weeks.length > (+z.gcWeeks || 4)) r.push(`Runs ${kc.weeks.length} weeks`);
+  if (kc && kc.n >= 5) r.push(`${kc.n}-person crew`);
+  return r;
+}
+const gcBox = r => r.length ? `<div class="today" style="border-color:var(--stop);background:#FDECEA;margin-top:1rem"><b>This one may need a GC.</b><ul style="margin:.3rem 0 0;padding-left:1.2rem">${r.map(x => `<li>${esc(x)}</li>`).join('')}</ul><p class="hint">Only you see this. It never prints on the customer's bid.</p></div>` : '';
+const weekList = kc => kc.weeks.map((w,i) => `<p><b>Week ${i+1}:</b> ${longDate(w.days[0])}${w.days.length > 1 ? ` to ${longDate(w.days[w.days.length-1])}` : ''} · ${w.days.length} work day${w.days.length === 1 ? '' : 's'}</p>`).join('');
+function payText(p, total){
+  const dep = Math.round(total*p)/100;
+  if (p <= 0) return 'Paid in full when the job is done.';
+  if (p >= 100) return `Paid in full (${money(total)}) before work starts.`;
+  return `${p}% deposit (${money(dep)}) before work starts. Balance of ${money(total - dep)} when the job is done.`;
+}
+function bidCrew(){
+  if (!W.lines.length) { toast('Add at least one thing first.'); return; }
+  if (!W.crew) W.crew = newCrew();
+  const k = W.crew, y = window.scrollY, again = $('#k-out') !== null;
+  const people = k.workers.filter(w => !w.beer).length;
+  bar('Make a bid · Step 4 of 5', '#/');
+  render(`
+    <p class="progress">Step 4 of 5: Crew and timeline.</p>
+    <label for="k-base">How many days would this take you and one helper? <span class="hint">6-hour days. Half days are fine, like 2.5.</span></label>
+    <input id="k-base" type="number" inputmode="decimal" min="0" step="0.5" value="${esc(k.base)}" oninput="W.crew.base=this.value;crewOut()">
+    <h2>Who is on the crew</h2>
+    ${k.workers.map((w,i) => w.beer ? `<div class="item"><div class="t">Anson</div><div class="muted">Paid in one 6-pack.</div></div>` : `
+      <div class="item">
+        <label for="k-t${i}" style="margin-top:0">Worker ${i+1}</label>
+        <select id="k-t${i}" onchange="setTrade(${i}, this.value)">${TRADES.map(t => `<option ${t === w.trade ? 'selected' : ''}>${esc(t)}</option>`).join('')}</select>
+        <label for="k-r${i}">Pay per hour</label>
+        <input id="k-r${i}" type="number" inputmode="decimal" min="0" step="0.5" value="${esc(w.rate)}" oninput="W.crew.workers[${i}].rate=this.value;crewOut()">
+        ${people > 1 ? `<button class="big danger" onclick="W.crew.workers.splice(${i},1);bidCrew()">Take off the crew</button>` : ''}
+      </div>`).join('')}
+    <button class="big" onclick="addWorker()">${ic('plus')}Add a worker</button>
+    <label class="check"><input type="checkbox" ${k.anson ? 'checked' : ''} onchange="toggleAnson(this.checked)">Add Anson to the job for a 6-pack?</label>
+    <h2>Schedule</h2>
+    <div class="row">
+      <div><label for="k-hpd">Hours a day</label><input id="k-hpd" type="number" inputmode="decimal" min="1" max="16" value="${esc(k.hpd)}" oninput="W.crew.hpd=this.value;crewOut()"></div>
+      <div><label for="k-dpw">Days a week</label><input id="k-dpw" type="number" inputmode="numeric" min="1" max="7" value="${esc(k.dpw)}" oninput="W.crew.dpw=this.value;crewOut()"></div>
+    </div>
+    <label for="k-start">Start date</label><input id="k-start" type="date" value="${esc(k.start)}" onchange="W.crew.start=this.value;crewOut()">
+    <label for="k-plan">Planning and shopping hours <span class="hint">Done outside the work days. Paid at worker 1's rate.</span></label>
+    <input id="k-plan" type="number" inputmode="decimal" min="0" step="0.5" value="${esc(k.plan)}" oninput="W.crew.plan=this.value;crewOut()">
+    <h2>Labor price</h2>
+    <label for="k-mk">Markup on labor (%)</label>
+    <input id="k-mk" type="number" inputmode="decimal" min="0" value="${esc(k.mk)}" oninput="W.crew.mk=this.value;crewOut()">
+    <label class="check"><input type="checkbox" ${k.onBid ? 'checked' : ''} onchange="W.crew.onBid=this.checked;crewOut()">Put the labor on the bid</label>
+    <div id="k-out" aria-live="polite"></div>
+    <button class="big primary" onclick="crewDone()">Next ${ic('arrow')}</button>
+    <button class="big" onclick="W.crew=null;W.lines=W.lines.filter(l=>!l.crew);bidStep4()">Skip, no timeline</button>
+  `);
+  crewOut();
+  if (again) window.scrollTo(0, y);
+}
+function setTrade(i, t){
+  const w = W.crew.workers[i], r = (D.biz.rates || {})[t];
+  w.trade = t; if (r != null && (w.rate === '' || w.rate == null)) w.rate = r;
+  bidCrew();
+}
+function addWorker(){
+  const k = W.crew, at = k.workers.filter(w => !w.beer).length;
+  k.workers.splice(at, 0, {trade:'Laborer', rate:(D.biz.rates || {})['Laborer'] ?? ''});
+  bidCrew();
+}
+function toggleAnson(on){
+  const k = W.crew; k.anson = on; k.workers = k.workers.filter(w => !w.beer);
+  if (on) k.workers.push({trade:'Laborer', name:'Anson', rate:0, beer:true});
+  bidCrew(); toast(on ? 'Anson is in. Bring the 6-pack.' : 'Anson is off the job.');
+}
+function crewOut(){
+  const el = $('#k-out'); if (!el) return;
+  const kc = crewCalc(W.crew);
+  if (!kc.days) { el.innerHTML = '<div class="empty" style="margin-top:1rem">Type how many days it takes you and a helper. The timeline shows up here.</div>'; return; }
+  el.innerHTML = `
+    <div class="say" style="margin-top:1rem">
+      <p class="total">${kc.n}-person crew · about ${kc.days} work days</p>
+      <p>Start ${longDate(kc.start)}. Finish ${longDate(kc.finish)}. ${kc.weeks.length} week${kc.weeks.length === 1 ? '' : 's'}.</p>
+      ${kc.ovh > 1 ? `<p class="hint">Includes ${Math.round((kc.ovh-1)*100)}% extra time for running a bigger crew.</p>` : ''}
+      <p class="money">Labor cost (private): <b>${money(kc.cost)}</b></p>
+      <p class="money">Labor on the bid: <b>${W.crew.onBid ? money(kc.charge) : 'left off'}</b></p>
+      ${kc.missing ? `<p class="due">${kc.missing} worker${kc.missing === 1 ? ' has' : 's have'} no pay set yet.</p>` : ''}
+    </div>
+    ${weekList(kc)}
+    ${gcBox(gcReasons({...W, lines: crewLines(W, kc)}, kc))}`;
+}
+function crewDone(){
+  const kc = crewCalc(W.crew);
+  if (!kc.days) { toast('Type how many days it takes you and a helper.'); $('#k-base').focus(); return; }
+  const had = W.crew.onBid && W.lines.some(isLaborHours);
+  W.lines = crewLines(W, kc);
+  D.biz.rates = D.biz.rates || {};
+  W.crew.workers.forEach(w => { if (!w.beer && w.rate !== '' && w.rate != null) D.biz.rates[w.trade] = +w.rate; });
+  save(); bidStep4();
+  if (had) toast('Labor hours from step 3 were swapped for the crew labor.');
+}
+function depOut(){
+  $('#w-dep-p').textContent = W.deposit;
+  $('#w-dep-out').textContent = payText(W.deposit, bidTotal(W).total);
+}
+function bidStep4(){
+  if (!W.lines.length) { toast('Add at least one thing first.'); return; }
+  bar('Make a bid · Step 5 of 5', '#/');
+  const t = bidTotal(W);
+  render(`
+    <p class="progress">Step 5 of 5: Check it.</p>
+    ${W.lines.map(l=>`<p>${esc(l.name)}${l.qty>1?` × ${l.qty}`:''} <b class="money" style="float:right">${money(l.qty*l.price)}</b></p>`).join('')}
+    <hr>
+    <label class="check"><input type="checkbox" id="w-get" ${W.get?'checked':''} onchange="W.get=this.checked;bidStep4()">Add Hawaiʻi GET (4.712%)</label>
+    <p class="money">Before tax: ${money(t.sub)}</p>
+    ${W.get ? `<p class="money">GET: ${money(t.tax)}</p>` : ''}
+    <p class="total money">Total: ${money(t.total)}</p>
+    ${(() => { const kc = crewCalc(W.crew); return kc && kc.days ? `<p><b>Timeline:</b> ${kc.n}-person crew, about ${kc.days} work days. ${longDate(kc.start)} to ${longDate(kc.finish)}.</p>` : ''; })()}
+    <label for="w-dep">Deposit to start: <span id="w-dep-p">${W.deposit}</span>% <span class="hint">What the customer pays up front.</span></label>
+    <input id="w-dep" type="range" min="0" max="100" step="5" value="${W.deposit}" oninput="W.deposit=+this.value;depOut()">
+    <p class="money" id="w-dep-out"></p>
+    ${gcBox(gcReasons(W, crewCalc(W.crew)))}
+    <label for="w-note">A note for the customer <span class="hint">Optional. Example: "Includes cleanup."</span></label>
+    <textarea id="w-note">${esc(W.note)}</textarea>
+    <button class="big primary" onclick="W.note=$('#w-note').value.trim();finishBid()">${ic('check')}Make the ${W.estimate?'estimate':'bid'}</button>
+  `);
+  depOut();
+}
+function finishBid(){
+  const b = {id:id(), num:D.seq++, date:today(), sent:false, ...W};
+  D.bids.push(b); save(); W = null; go(`#/bid/${b.id}`);
+}
+function bidView(bid){
+  const b = D.bids.find(x => x.id === bid); if (!b) return go('#/');
+  const c = cust(b.cid) || {name:'(deleted)'};
+  const t = bidTotal(b), z = D.biz, word = b.estimate ? 'Estimate' : 'Bid', kc = crewCalc(b.crew);
+  const until = new Date(b.date+'T12:00:00'); until.setDate(until.getDate() + (+z.goodDays||30));
+  bar(`${word} #${b.num}`, c.id ? `#/c/${c.id}` : '#/');
+  render(`
+    <div class="noprint">
+      <button class="big primary" onclick="window.print()">${ic('share')}Save as PDF or print</button>
+      <p class="hint">On the next screen, pick "Save as PDF", then send the PDF by text or email.</p>
+      ${c.phone ? `<a class="big" href="sms:${digits(c.phone)}?body=${encodeURIComponent(`Aloha ${c.name.split(' ')[0]}, this is ${z.owner} with ${z.name}. Your ${word.toLowerCase()} comes to ${money(t.total)}. I'll send the full copy. Any questions, call me at ${z.phone}.`)}">${ic('text')}Text them the total</a>` : ''}
+      ${!b.sent && c.id ? `<button class="big navy" onclick="markSent('${b.id}')">${ic('check')}I sent it</button>` : (b.sent ? '<p><b>Sent.</b></p>' : '')}
+    </div>
+    <div class="paper" style="margin-top:1rem">
+      <h3>${esc(z.name)}</h3>
+      <div>${esc(z.owner)}${z.license?` · Lic. #${esc(z.license)}`:''}</div>
+      <div>${esc(z.phone)}${z.email?` · ${esc(z.email)}`:''}</div>
+      <hr>
+      <div><b>${word} #${b.num}</b> · ${new Date(b.date+'T12:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+      <div><b>For:</b> ${esc(c.name)}${c.address?`, ${esc(c.address)}`:''}</div>
+      ${b.job && b.job.length ? `<div><b>Job:</b> ${esc(b.job.join(', '))}</div>` : ''}
+      <table><thead><tr><th>Item</th><th class="n">Qty</th><th class="n">Price</th><th class="n">Amount</th></tr></thead><tbody>
+      ${b.lines.map(l=>`<tr><td>${esc(l.name)}</td><td class="n">${l.qty}</td><td class="n money">${money(l.price)}</td><td class="n money">${money(l.qty*l.price)}</td></tr>`).join('')}
+      </tbody><tbody class="sum">
+        <tr><td colspan="3" class="n">Subtotal</td><td class="n money">${money(t.sub)}</td></tr>
+        ${b.get ? `<tr><td colspan="3" class="n">Hawaiʻi GET (4.712%)</td><td class="n money">${money(t.tax)}</td></tr>` : ''}
+        <tr><td colspan="3" class="n">Total</td><td class="n money">${money(t.total)}</td></tr>
+      </tbody></table>
+      ${kc && kc.days ? `<p><b>Schedule:</b> ${kc.n}-person crew, about ${kc.days} work days, ${kc.dpw} days a week. Estimated start ${fullDate(kc.start)}. Estimated finish ${fullDate(kc.finish)}.</p>` : ''}
+      ${b.deposit != null ? `<p><b>Payment:</b> ${payText(b.deposit, t.total)}</p>` : ''}
+      ${b.estimate ? '<p><b>This is a rough estimate.</b> The final price comes after a site visit.</p>' : ''}
+      ${b.note ? `<p>${esc(b.note)}</p>` : ''}
+      <p>This ${word.toLowerCase()} is good until ${until.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}.</p>
+      ${b.estimate ? '' : `<div class="sign"><div>Accepted by</div><div>Date</div></div>`}
+    </div>
+    <div class="noprint">
+      <a class="big navy" style="margin-top:1.4rem" href="#/bid/${b.id}/rob">${ic('file')}Rob's copy (private)</a>
+      <button class="big danger" onclick="delBid('${b.id}')">Delete this ${word.toLowerCase()}</button>
+    </div>
+  `);
+}
+function robCopy(bid){
+  const b = D.bids.find(x => x.id === bid); if (!b) return go('#/');
+  const c = cust(b.cid) || {name:'(deleted)'}, t = bidTotal(b), kc = crewCalc(b.crew), word = b.estimate ? 'Estimate' : 'Bid';
+  bar(`Rob's copy · #${b.num}`, `#/bid/${b.id}`);
+  const unit = l => l.cost ?? (l.pid ? (D.prices.find(p => p.id === l.pid) || {}).cost : null);
+  const rows = b.lines.map(l => { const u = unit(l); return {l, charge:l.qty*l.price, cost: u == null ? null : u*l.qty}; });
+  const known = rows.filter(r => r.cost != null), costSum = known.reduce((s,r) => s + r.cost, 0), over = known.reduce((s,r) => s + r.charge - r.cost, 0);
+  const missing = rows.length - known.length;
+  const hoursOf = i => kc.hrs + (i === 0 ? kc.plan : 0);
+  render(`
+    <div class="today" style="border-color:var(--stop);background:#FDECEA"><b>PRIVATE. Never send this to the customer.</b></div>
+    <div class="noprint"><button class="big" onclick="window.print()">${ic('share')}Print or save Rob's copy</button></div>
+    <div class="paper" style="margin-top:1rem">
+      <h3>Rob's copy · ${word} #${b.num}</h3>
+      <div>${esc(c.name)} · ${niceDate(b.date)}</div>
+      <table><thead><tr><th>Item</th><th class="n">Charge</th><th class="n">Your cost</th><th class="n">Over cost</th></tr></thead><tbody>
+      ${rows.map(r => `<tr><td>${esc(r.l.name)}${r.l.qty > 1 ? ` × ${r.l.qty}` : ''}</td><td class="n money">${money(r.charge)}</td><td class="n money">${r.cost == null ? '?' : money(r.cost)}</td><td class="n money">${r.cost == null ? '?' : money(r.charge - r.cost)}</td></tr>`).join('')}
+      </tbody><tbody class="sum">
+        <tr><td>Before tax</td><td class="n money">${money(t.sub)}</td><td class="n money">${money(costSum)}</td><td class="n money">${money(over)}</td></tr>
+      </tbody></table>
+      ${missing ? `<p class="due">${missing} item${missing === 1 ? ' has' : 's have'} no cost saved, so the totals leave ${missing === 1 ? 'it' : 'them'} out. Add costs in My prices.</p>` : ''}
+      ${b.get ? `<p>GET on the bid: ${money(t.tax)}. That goes to the state.</p>` : ''}
+      ${b.deposit != null ? `<p><b>Payment:</b> ${payText(b.deposit, t.total)}</p>` : ''}
+      ${kc && kc.days ? `
+        <h3 style="margin-top:1rem">Crew</h3>
+        <table><thead><tr><th>Who</th><th class="n">Pay/hr</th><th class="n">Hours</th><th class="n">Pay</th></tr></thead><tbody>
+        ${b.crew.workers.map((w,i) => w.beer ? `<tr><td>Anson</td><td class="n" colspan="3">One 6-pack</td></tr>` : `<tr><td>${esc(w.trade)}</td><td class="n money">${w.rate === '' || w.rate == null ? '?' : money(+w.rate)}</td><td class="n">${hoursOf(i)}</td><td class="n money">${money((+w.rate || 0)*hoursOf(i))}</td></tr>`).join('')}
+        </tbody></table>
+        ${kc.plan ? `<p class="hint">Worker 1's hours include ${kc.plan} hours of planning and shopping.</p>` : ''}
+        <p>Labor cost ${money(kc.cost)}. Labor on the bid: ${b.crew.onBid ? `${money(kc.charge)} (${esc(b.crew.mk)}% markup)` : 'left off'}.</p>
+        <h3 style="margin-top:1rem">Timeline</h3>
+        <p>About ${kc.days} work days, ${kc.hpd} hours a day, ${kc.dpw} days a week.</p>
+        ${weekList(kc)}` : ''}
+      ${gcBox(gcReasons(b, kc))}
+    </div>`);
+}
+function markSent(bid){
+  const b = D.bids.find(x => x.id === bid), c = cust(b.cid);
+  b.sent = true; if (['new','visit'].includes(c.step)) c.step = 'bid'; c.next = addDays(3);
+  save(); bidView(bid); toast(`Sent. Call ${c.name.split(' ')[0]} back ${niceDate(c.next)}.`);
+}
+function delBid(bid){
+  const b = D.bids.find(x => x.id === bid);
+  if (!confirm('Delete this bid?')) return;
+  D.bids = D.bids.filter(x => x !== b); save(); go(b.cid ? `#/c/${b.cid}` : '#/');
+  toast('Bid deleted.', () => { D.bids.push(b); save(); route(); });
+}
+
+/* ---------- what to say ---------- */
+const SAY = [
+  {k:'new', t:'First call', say:[
+    'Aloha, this is Robert from Off The Grid. Thanks for calling.',
+    'What do you want to power, or what made you call?',
+    'Let me come take a look. Is this week good?'],
+   ask:['What do you want to keep running when the power goes out?','About how much is your electric bill?','How old is the house and the roof?','Is it your house, or are you renting?'],
+   plan:'Set a visit day. Then tap "Visit is set".'},
+  {k:'visit', t:'At the site visit', say:[
+    'Show me around. Where is your main panel?',
+    'Tell me what matters most to you.',
+    'I\'ll put a bid together and get it to you by (day).'],
+   ask:['What do you want running in an outage?','Any plans for an EV or more AC?','Who else needs to say yes?','When do you want it done?'],
+   plan:'Take photos of the panel and the roof. Write notes. Make the bid the same day.'},
+  {k:'bid', t:'Giving the bid', say:[
+    'Here is what I would do, and why.',
+    'This is the total. No surprises.',
+    'What questions do you have?'],
+   ask:['Does this cover what you wanted?','Is anything missing?','What would you need to move forward?'],
+   plan:'Tap "I sent it". The app sets a call back in 3 days.'},
+  {k:'follow', t:'Following up', say:[
+    'Aloha, it\'s Robert. Just checking in on the bid.',
+    'Any questions I can answer?',
+    'Want me to hold a spot on my schedule?'],
+   ask:['Did you get a chance to look it over?','Anything you want changed?'],
+   plan:'If no answer, leave a short message. Set the next call back for next week.'},
+  {k:'price', t:'"It costs too much"', say:[
+    'I hear you. Let\'s look at it together.',
+    'We can do it in two parts, the most important part first.',
+    'Or we can take something out. What matters most to you?'],
+   ask:['What number did you have in mind?','What part matters most?'],
+   plan:'Change the bid, don\'t just cut the price.'},
+  {k:'think', t:'"I need to think about it"', say:[
+    'Of course. It\'s a big decision.',
+    'What part are you thinking about?',
+    'Can I call you on (day) to answer questions?'],
+   ask:['Is it the price, the timing, or something else?'],
+   plan:'Set a call back day before you hang up.'},
+  {k:'won', t:'They said yes', say:[
+    'Mahalo! Here is what happens next.',
+    'I\'ll call you to set the start day.'],
+   ask:['Best day and time to start?','Gate code or pets I should know about?'],
+   plan:'Set the start day. Write it in notes.'},
+  {k:'done', t:'After the job', say:[
+    'Everything is working. Let me show you how to use it.',
+    'If you\'re happy, a Google review would help us a lot.',
+    'Know anyone else who needs this? I\'d be grateful.'],
+   ask:['Any questions on how it works?'],
+   plan:'Ask for the review in person, then text them the link.'}
+];
+function sayList(){
+  bar('What to say', '#/');
+  render(`<p class="muted">Pick what is happening right now.</p>` + SAY.map(s => `<button class="big" style="justify-content:flex-start" onclick="go('#/say/${s.k}')">${ic('chat')}${esc(s.t)}</button>`).join(''));
+}
+function sayView(k){
+  const s = SAY.find(x => x.k === k) || SAY[0];
+  bar(s.t, '#/say');
+  render(`
+    <h2>Say</h2><div class="say"><ul>${s.say.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    <h2>Ask</h2><div class="say" style="border-color:var(--blue)"><ul>${s.ask.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    <h2>Then</h2><p>${esc(s.plan)}</p>
+    <button class="big" onclick="history.back()">${ic('back')}Done</button>
+  `);
+}
+
+/* ---------- prices ---------- */
+function prices(){
+  bar('My prices', '#/');
+  render(`
+    <p class="muted">What you charge the customer. Your cost stays private and never shows on a bid.</p>
+    <button class="big primary" onclick="go('#/prices/new')">${ic('plus')}Add something</button>
+    ${D.prices.map(p=>`<button class="card" onclick="go('#/prices/${p.id}')"><span class="name">${esc(p.name)}</span><br>${p.price!=null?`<span class="money">${money(p.price)}</span> per ${esc(p.unit)}`:'<span class="due">No price yet. Tap to set it.</span>'}</button>`).join('')}
+  `);
+}
+function priceForm(pid){
+  const p = pid ? D.prices.find(x=>x.id===pid) : {name:'', unit:'job', price:null, cost:null};
+  bar(pid ? 'Change price' : 'New price', '#/prices');
+  render(`
+    <label for="p-name">What is it</label><input id="p-name" type="text" value="${esc(p.name)}">
+    <label for="p-unit">Charged per</label>
+    <select id="p-unit">${['job','hour','foot','panel','each','day'].map(u=>`<option ${u===p.unit?'selected':''}>${u}</option>`).join('')}</select>
+    <label for="p-price">You charge <span class="hint">What the customer pays</span></label>
+    <input id="p-price" type="number" inputmode="decimal" min="0" step="0.01" value="${p.price ?? ''}">
+    <h2>Don't know the price? Work it out</h2>
+    <label for="p-cost">It costs you <span class="hint">Private. Never on a bid.</span></label>
+    <input id="p-cost" type="number" inputmode="decimal" min="0" step="0.01" value="${p.cost ?? ''}">
+    <label for="p-mark">Plus markup (%)</label>
+    <input id="p-mark" type="number" inputmode="decimal" min="0" step="1" value="${D.biz.markup}">
+    <button class="big" onclick="calcPrice()">Work out my price</button>
+    <p id="p-err" class="due" role="alert"></p>
+    <button class="big primary" onclick="savePrice('${pid||''}')">${ic('check')}Save</button>
+    ${pid ? `<button class="big danger" onclick="delPrice('${pid}')">Delete</button>` : ''}
+  `);
+}
+function calcPrice(){
+  const cost = parseFloat($('#p-cost').value), mk = parseFloat($('#p-mark').value) || 0;
+  if (isNaN(cost)) { $('#p-err').textContent = 'Type what it costs you first.'; return; }
+  $('#p-price').value = (Math.round(cost*(1+mk/100)*100)/100).toFixed(2);
+  $('#p-err').textContent = ''; toast(`Your price: ${money(+$('#p-price').value)}`);
+}
+function savePrice(pid){
+  const name = $('#p-name').value.trim(), price = parseFloat($('#p-price').value), cost = parseFloat($('#p-cost').value);
+  if (!name) { $('#p-err').textContent = 'Type what it is.'; return; }
+  if (isNaN(price)) { $('#p-err').textContent = 'Type your price, or work it out from your cost.'; return; }
+  const data = {name, unit:$('#p-unit').value, price, cost: isNaN(cost) ? null : cost};
+  if (pid) Object.assign(D.prices.find(x=>x.id===pid), data); else D.prices.push({id:id(), ...data});
+  save(); go('#/prices'); toast('Saved.');
+}
+function delPrice(pid){
+  const p = D.prices.find(x=>x.id===pid), i = D.prices.indexOf(p);
+  if (!confirm(`Delete ${p.name}?`)) return;
+  D.prices.splice(i,1); save(); go('#/prices');
+  toast(`${p.name} deleted.`, () => { D.prices.splice(i,0,p); save(); route(); });
+}
+
+/* ---------- settings ---------- */
+function settings(){
+  bar('Settings', '#/');
+  const z = D.biz, sz = document.documentElement.dataset.size;
+  render(`
+    <h2>Text size</h2>
+    <div class="row">${['1','2','3'].map((n,i)=>`<button class="big ${sz===n?'navy':''}" style="font-size:${1+i*.2}rem" onclick="setSize('${n}')">${['Big','Bigger','Biggest'][i]}</button>`).join('')}</div>
+
+    <h2>Your business <span class="hint">This shows at the top of every bid.</span></h2>
+    <label for="b-name">Business name</label><input id="b-name" type="text" value="${esc(z.name)}">
+    <label for="b-owner">Your name</label><input id="b-owner" type="text" value="${esc(z.owner)}">
+    <label for="b-lic">License #</label><input id="b-lic" type="text" value="${esc(z.license)}">
+    <label for="b-phone">Phone</label><input id="b-phone" type="tel" value="${esc(z.phone)}">
+    <label for="b-email">Email</label><input id="b-email" type="email" value="${esc(z.email)}">
+    <label for="b-days">Bids are good for (days)</label><input id="b-days" type="number" inputmode="numeric" min="1" value="${esc(z.goodDays)}">
+    <label for="b-mark">Usual markup (%)</label><input id="b-mark" type="number" inputmode="decimal" min="0" value="${esc(z.markup)}">
+    <label for="b-dep">Deposit asked on new bids (%)</label><input id="b-dep" type="number" inputmode="numeric" min="0" max="100" value="${esc(z.deposit)}">
+    <label for="b-ovh">Extra time per added worker (%) <span class="hint">For each worker past you and one helper.</span></label><input id="b-ovh" type="number" inputmode="decimal" min="0" value="${esc(z.ovh)}">
+    <label for="b-gct">Flag for a GC when a bid is over ($)</label><input id="b-gct" type="number" inputmode="decimal" min="0" value="${esc(z.gcTotal)}">
+    <label for="b-gcw">Or when it runs longer than (weeks)</label><input id="b-gcw" type="number" inputmode="numeric" min="1" value="${esc(z.gcWeeks)}">
+    <label class="check"><input type="checkbox" id="b-get" ${z.get?'checked':''}>Add Hawaiʻi GET (4.712%) to new bids</label>
+    <button class="big primary" onclick="saveBiz()">${ic('check')}Save</button>
+
+    <h2>Backup</h2>
+    <p class="muted">Everything lives on this phone. Make a backup once a week and send it to Phoenix.</p>
+    <button class="big navy" onclick="backup()">${ic('share')}Make a backup</button>
+    <label class="big" for="restore" style="font-weight:700">Load a backup</label>
+    <input id="restore" type="file" accept="application/json,.json" hidden onchange="restore(this)">
+  `);
+}
+function setSize(n){ document.documentElement.dataset.size = n; localStorage.setItem('otg-size', n); settings(); }
+const num = (sel, d) => { const v = parseFloat($(sel).value); return isNaN(v) ? d : v; };
+function saveBiz(){
+  Object.assign(D.biz, {name:$('#b-name').value.trim(), owner:$('#b-owner').value.trim(), license:$('#b-lic').value.trim(), phone:$('#b-phone').value.trim(), email:$('#b-email').value.trim(), goodDays:parseInt($('#b-days').value)||30, markup:parseFloat($('#b-mark').value)||0, get:$('#b-get').checked,
+    deposit:Math.min(100, Math.max(0, num('#b-dep', 80))), ovh:num('#b-ovh', 10), gcTotal:num('#b-gct', 25000), gcWeeks:num('#b-gcw', 4)});
+  save(); toast('Saved.');
+}
+async function backup(){
+  const blob = new Blob([JSON.stringify(D)], {type:'application/json'});
+  const name = `otg-backup-${today()}.json`;
+  const file = new File([blob], name, {type:'application/json'});
+  if (navigator.canShare && navigator.canShare({files:[file]})) {
+    try { await navigator.share({files:[file], title:'OTG backup'}); return; } catch(e){ if (e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; a.click();
+  toast('Backup saved to Downloads.');
+}
+function restore(input){
+  const f = input.files[0]; if (!f) return;
+  f.text().then(t => {
+    const x = JSON.parse(t);
+    if (!x.customers || !x.biz) throw 0;
+    if (!confirm('Load this backup? It replaces what is on this phone now.')) return;
+    const snap = JSON.stringify(D); D = x; save(); go('#/');
+    toast('Backup loaded.', () => { D = JSON.parse(snap); save(); route(); });
+  }).catch(() => toast('That file is not an OTG backup.'));
+}
+
+/* ---------- router ---------- */
+function route(){
+  const h = location.hash.replace(/^#\/?/, '').split('/');
+  if (h[0] === 'list') return list();
+  if (h[0] === 'c' && h[1] === 'new') return custForm();
+  if (h[0] === 'c' && h[2] === 'edit') return custForm(h[1]);
+  if (h[0] === 'c') return custView(h[1]);
+  if (h[0] === 'bid' && h[1] === 'new') return bidNew(h[2]);
+  if (h[0] === 'bid' && h[2] === 'rob') return robCopy(h[1]);
+  if (h[0] === 'bid') return bidView(h[1]);
+  if (h[0] === 'say' && h[1]) return sayView(h[1]);
+  if (h[0] === 'say') return sayList();
+  if (h[0] === 'prices' && h[1] === 'new') return priceForm();
+  if (h[0] === 'prices' && h[1]) return priceForm(h[1]);
+  if (h[0] === 'prices') return prices();
+  if (h[0] === 'settings') return settings();
+  return home();
+}
+window.addEventListener('hashchange', route);
+route();
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
